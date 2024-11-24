@@ -1,0 +1,74 @@
+<div class="trade-details container mt-4">
+  <h3 class="text-white mb-4">Trade Details</h3>
+  <div class="card bg-dark text-white shadow-sm">
+    <div class="card-body">
+      <div *ngIf="successMessage" class="alert alert-success" role="alert">
+        {{ successMessage }}
+      </div>
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <p><strong>Date:</strong> {{ trade.timestamp | date }}</p>
+        </div>
+        <div class="col-md-6">
+          <p>
+            <strong>Buy Price:</strong> {{ trade.buyPrice }}
+            {{ trade.buyCurrency }}
+          </p>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <p>
+            <strong>Current Price:</strong> {{ actualPrice }}
+            {{ trade.buyCurrency }}
+          </p>
+        </div>
+        <div class="col-md-6">
+          <p
+            [ngClass]="{
+              'text-success': changePercentage > 0,
+              'text-danger': changePercentage < 0
+            }"
+          >
+            <strong>Change:</strong> {{ changePercentage }}%
+            <span *ngIf="changePercentage > 0">&#8593;</span>
+            <span *ngIf="changePercentage < 0">&#8595;</span>
+          </p>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <p><strong>Currency:</strong> {{ trade.symbol }}</p>
+        </div>
+        <div class="col-md-6">
+          <p><strong>Amount:</strong> {{ trade.amount }}</p>
+        </div>
+      </div>
+      <div
+        *ngIf="trade.stopLossOrderActive"
+        class="row mb-3"
+      >
+        <div class="col-md-6" *ngIf="trade.stopLossOrderActive">
+          <p>
+            <strong>Stop-Loss Order Price:</strong>
+            {{ trade.stopLossOrderPrice }} {{ trade.buyCurrency }}
+          </p>
+        </div>
+      </div>
+      <div class="form-group mb-3">
+        <label for="stopLossOrderPrice">Stop-Loss Order Price:</label>
+        <input
+          type="number"
+          class="form-control"
+          id="stopLossOrderPrice"
+          [(ngModel)]="stopLossOrderPrice"
+        />
+      </div>
+      <div class="d-flex justify-content-between">
+        <button class="btn btn-danger" (click)="placeStopLossOrder()">
+          Place Stop-Loss Order
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

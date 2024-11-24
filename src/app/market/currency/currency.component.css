@@ -1,0 +1,62 @@
+.table {
+  margin-bottom: 0;
+}
+
+.thead-dark th {
+  background-color: #343a40;
+  border-color: #454d55;
+}
+
+.table-hover tbody tr:hover {
+  background-color: #3e444a;
+}
+
+.sortable {
+  cursor: pointer;
+}
+
+.sortable:hover {
+  color: #007bff;
+}
+
+.arrow {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-left: 5px;
+  vertical-align: middle;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+}
+
+.arrow-up {
+  border-bottom: 4px solid #fff;
+}
+
+.arrow-down {
+  border-top: 4px solid #fff;
+}
+
+.currency-row td {
+  vertical-align: middle;
+}
+
+.currency-row img {
+  border-radius: 50%;
+}
+
+.currency-row .fa {
+  cursor: pointer;
+}
+
+.currency-row .fa-star {
+  color: #ffd700;
+}
+
+.currency-row .text-success {
+  color: #28a745 !important;
+}
+
+.currency-row .text-danger {
+  color: #dc3545 !important;
+}

@@ -1,0 +1,35 @@
+<div class="block-detail" *ngIf="block">
+  <h3 class="text-white mb-4">Block Details</h3>
+  <div class="table-responsive">
+    <table class="table table-dark">
+      <thead class="table-header">
+        <tr>
+          <th>Date</th>
+          <th>Type</th>
+          <th>Currency</th>
+          <th>Amount</th>
+          <th>Transaction Fee</th>
+          <th>From</th>
+          <th>To</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let transaction of block.transactions">
+          <tr *ngIf="transaction.isValid" class="transaction-row">
+            <td>{{ transaction.date | date }}</td>
+            <td>{{ transaction.type }}</td>
+            <td>{{ transaction.currency }}</td>
+            <td>{{ transaction.amount }}</td>
+            <td>{{ transaction.transactionFee }}</td>
+            <td>{{ transaction.from }}</td>
+            <td>{{ transaction.to }}</td>
+            <td>
+              <span class="badge badge-success">Valid</span>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+</div>

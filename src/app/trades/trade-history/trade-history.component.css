@@ -1,0 +1,66 @@
+.trade-history {
+  margin-top: 20px;
+}
+
+.table-header {
+  background-color: #343a40;
+}
+
+.table-header th {
+  padding: 15px;
+  border-top: none;
+  border-bottom: 2px solid #000080;
+}
+
+.trade-row td {
+  padding: 15px;
+}
+
+.trade-row td:first-child {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.trade-row td:last-child {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+  border-color: #545b62;
+}
+
+.btn-secondary:focus,
+.btn-secondary.focus {
+  box-shadow: 0 0 0 0.25rem rgba(108, 117, 125, 0.5);
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: #495057;
+}
+
+.table-striped tbody tr:nth-of-type(even) {
+  background-color: #343a40;
+}
+
+.card {
+  background-color: #343a40;
+}
+
+.card-header {
+  background-color: #212529;
+}
+
+.card-header h4 {
+  color: #fff;
+}
+
+.card-body p {
+  color: #fff;
+}

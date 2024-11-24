@@ -1,0 +1,128 @@
+<div
+  class="modal fade show d-block"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="transferModalLabel"
+  aria-modal="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="transferModalLabel">Transfer</h5>
+        <button
+          type="button"
+          class="close"
+          aria-label="Close"
+          (click)="closeModal()"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="successMessage" class="alert alert-success">
+          {{ successMessage }}
+        </div>
+        <div *ngIf="errorMessage" class="alert alert-danger">
+          {{ errorMessage }}
+        </div>
+        <form (ngSubmit)="submitTransfer()" #transferForm="ngForm">
+          <div class="form-group">
+            <label for="from">From Address: </label>
+            <input
+              type="text"
+              class="form-control"
+              id="from"
+              name="from"
+              placeholder="Enter source address"
+              [(ngModel)]="from"
+              required
+              #fromCtrl="ngModel"
+            />
+            <div
+              *ngIf="fromCtrl.invalid && (fromCtrl.dirty || fromCtrl.touched)"
+              class="text-danger"
+            >
+              <div *ngIf="fromCtrl.errors.required">
+                Source address is required
+              </div>
+            </div>
+
+            <label for="to">To Address: </label>
+            <input
+              type="text"
+              class="form-control"
+              id="to"
+              name="to"
+              placeholder="Enter destination address"
+              [(ngModel)]="to"
+              required
+              #toCtrl="ngModel"
+            />
+            <div
+              *ngIf="toCtrl.invalid && (toCtrl.dirty || toCtrl.touched)"
+              class="text-danger"
+            >
+              <div *ngIf="toCtrl.errors.required">
+                Destination address is required
+              </div>
+            </div>
+
+            <label for="currency">Currency</label>
+            <select
+              class="form-control"
+              id="currency"
+              name="currency"
+              [(ngModel)]="currency"
+            >
+              <option value="USD">USD</option>
+              <option value="EUR">EUR</option>
+              <option value="BTC">BTC</option>
+              <option value="ETH">ETH</option>
+            </select>
+            <label for="amount">Amount</label>
+            <input
+              type="number"
+              class="form-control"
+              id="amount"
+              name="amount"
+              placeholder="Enter transfer amount"
+              min="0"
+              step="0.01"
+              [(ngModel)]="amount"
+              required
+              #amountCtrl="ngModel"
+            />
+            <div
+              *ngIf="
+                amountCtrl.invalid && (amountCtrl.dirty || amountCtrl.touched)
+              "
+              class="text-danger"
+            >
+              <div *ngIf="amountCtrl.errors.required">Amount is required</div>
+              <div *ngIf="amountCtrl.errors.min">
+                Amount must be a positive number
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              (click)="closeModal()"
+            >
+              Close
+            </button>
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="transferForm.invalid"
+            >
+              Transfer
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-backdrop fade show" (click)="closeModal()"></div>

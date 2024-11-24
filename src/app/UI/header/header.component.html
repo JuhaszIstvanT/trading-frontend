@@ -1,0 +1,68 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container">
+    <a class="navbar-brand" href="#">Trading App</a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-toggle="collapse"
+      data-target="#navbarNav"
+      aria-controls="navbarNav"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/market" routerLinkActive="active"
+            >Home</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/wallet" routerLinkActive="active"
+            >Dashboard</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/market" routerLinkActive="active"
+            >Market</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/blocks" routerLinkActive="active"
+            >Blocks</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/watchlist" routerLinkActive="active"
+            >Watchlist</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/profile" routerLinkActive="active"
+            >Profile</a
+          >
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            routerLink="/leaderboard"
+            routerLinkActive="active"
+            >Leaderboard</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/login" routerLinkActive="active"
+            >Login</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" (click)="onLogout()" style="cursor: pointer"
+            >Logout</a
+          >
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

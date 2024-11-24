@@ -1,0 +1,52 @@
+<div class="trade-history">
+  <h3 class="text-white mb-4">Trade History</h3>
+
+  <div class="d-flex mb-4">
+    <button class="btn btn-secondary me-2" (click)="sortTradesByDate()">
+      Sort by Date
+    </button>
+    <button class="btn btn-secondary" (click)="sortTradesByAmount()">
+      Sort by Amount
+    </button>
+  </div>
+
+  <table class="table table-dark table-striped">
+    <thead class="table-header">
+      <tr>
+        <th>Date</th>
+        <th>Buy Price</th>
+        <th>Sell Price</th>
+        <th>Currency</th>
+        <th>Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let trade of paginatedTrades" class="trade-row">
+        <td>{{ trade.timestamp | date }}</td>
+        <td>{{ trade.buyPrice }} {{ trade.buyCurrency }}</td>
+        <td>{{ trade.sellPrice }} {{ trade.sellCurrency }}</td>
+        <td>{{ trade.symbol }}</td>
+        <td>{{ trade.amount }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <app-pagination
+    [currentPage]="currentPage"
+    [totalPages]="getTotalPages()"
+    (pageChange)="onPageChange($event)"
+  ></app-pagination>
+
+  <div class="card mt-4">
+    <div class="card-header">
+      <h4 class="text-white">Trading Statistics</h4>
+    </div>
+    <div class="card-body">
+      <p class="text-white">Total Investments: {{ totalInvestments }}</p>
+      <p class="text-white">Total Revenue: {{ totalRevenue }}</p>
+      <p class="text-white">
+        Difference: {{ totalRevenue - totalInvestments }}
+      </p>
+    </div>
+  </div>
+</div>

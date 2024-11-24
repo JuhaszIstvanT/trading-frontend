@@ -1,0 +1,26 @@
+.block-container {
+  margin-top: 20px;
+}
+
+.table-header {
+  background-color: #343a40;
+}
+
+.table-header th {
+  padding: 15px;
+  border-top: none;
+  border-bottom: 2px solid #000080;
+}
+
+.block-row td {
+  padding: 15px;
+  cursor: pointer;
+}
+
+.block-row:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.text-white {
+  color: #fff;
+}

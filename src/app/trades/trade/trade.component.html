@@ -1,0 +1,56 @@
+<div class="trade-history">
+  <h3 class="text-white mb-4">Trade History</h3>
+
+  <div *ngIf="successMessage" class="alert alert-success" role="alert">
+    {{ successMessage }}
+  </div>
+
+  <table class="table table-dark table-hover">
+    <thead class="table-header">
+      <tr>
+        <th>Date</th>
+        <th>Buy Price</th>
+        <th>Current Price</th>
+        <th>Change</th>
+        <th>Currency</th>
+        <th>Amount</th>
+        <th>Limit Order</th>
+        <th>Stop-Loss Order</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="let trade of trades"
+        class="trade-row"
+        (click)="navigateToTradeDetails(trade.id)"
+      >
+        <td>{{ trade.timestamp | date }}</td>
+        <td>{{ trade.buyPrice }} {{ trade.buyCurrency }}</td>
+        <td>{{ actualPrices[trade.id] }} {{ trade.buyCurrency }}</td>
+        <td
+          [ngClass]="{
+            'text-success': changePercentage[trade.id] > 0,
+            'text-danger': changePercentage[trade.id] < 0
+          }"
+        >
+          {{ changePercentage[trade.id] }}%
+          <span *ngIf="changePercentage[trade.id] > 0">&#8593;</span>
+          <span *ngIf="changePercentage[trade.id] < 0">&#8595;</span>
+        </td>
+        <td>{{ trade.symbol }}</td>
+        <td>{{ trade.amount }}</td>
+        <td>{{ trade.limitOrderActive ? "Placed" : "Not Placed" }}</td>
+        <td>{{ trade.stopLossOrderActive ? "Placed" : "Not Placed" }}</td>
+        <td>
+          <button
+            class="btn btn-primary"
+            (click)="onSellTrade(trade); $event.stopPropagation()"
+          >
+            Sell
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

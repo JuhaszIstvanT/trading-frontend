@@ -1,0 +1,79 @@
+<div class="container mt-4">
+  <h2>User Details</h2>
+  <div *ngIf="user" class="user-details">
+    <p id="username"><strong>Username:</strong> {{ user.userName }}</p>
+    <p id="profit"><strong>Profit:</strong> {{ user.profit | currency }}</p>
+    <p id="address"><strong>Address:</strong> {{ user.wallet.address }}</p>
+
+    <div class="section">
+      <h3>Trading Statistics</h3>
+      <ul class="list-unstyled">
+        <li id="total-trades">Total Trades: {{ user.wallet.trades.length }}</li>
+        <li id="avg-buy-price">
+          Average Buy Price: {{ getAverageBuyPrice() | currency }}
+        </li>
+        <li id="avg-sell-price">
+          Average Sell Price: {{ getAverageSellPrice() | currency }}
+        </li>
+        <li id="total-profit-loss">
+          Total Profit/Loss: {{ getTotalProfitLoss() | currency }}
+        </li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h3>Recent Trades</h3>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Symbol</th>
+            <th>Amount</th>
+            <th>Buy Price</th>
+            <th>Sell Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let trade of paginatedTrades">
+            <td>{{ trade.name }}</td>
+            <td>{{ trade.symbol }}</td>
+            <td>{{ trade.amount }}</td>
+            <td>{{ trade.buyPrice | currency }}</td>
+            <td>{{ trade.sellPrice | currency }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <app-pagination
+        [currentPage]="currentPage"
+        [totalPages]="getTotalPages()"
+        (pageChange)="onPageChange($event)"
+      ></app-pagination>
+    </div>
+
+    <div class="follow-buttons">
+      <button
+        *ngIf="!isFollowing"
+        class="btn btn-success"
+        id="follow-btn"
+        (click)="follow()"
+      >
+        Follow
+      </button>
+      <button
+        *ngIf="isFollowing"
+        class="btn btn-danger"
+        id="unfollow-btn"
+        (click)="unfollow()"
+      >
+        Unfollow
+      </button>
+    </div>
+  </div>
+  <div *ngIf="!user" class="loading-message">
+    <p>Loading user details...</p>
+  </div>
+  <button class="btn btn-primary" id="back-btn" (click)="goBack()">
+    Back to Leaderboard
+  </button>
+</div>

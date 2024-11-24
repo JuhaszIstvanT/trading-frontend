@@ -1,0 +1,123 @@
+<div class="container mt-5">
+  <h1 class="text-center mb-5">Wallet</h1>
+
+  <p><strong>Address:</strong> {{ address }}</p>
+
+  <div class="row">
+    <div class="col-md-6 mb-4">
+      <div class="card bg-dark text-white shadow-sm">
+        <div class="card-body">
+          <h3 class="card-title mb-4">Balance</h3>
+          <ul class="list-unstyled mb-0">
+            <li *ngFor="let balance of balances">
+              <strong>{{ balance.currency }}:</strong> {{ balance.amount }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+      <app-trade></app-trade>
+    </div>
+  </div>
+
+  <div class="row mb-5">
+    <div class="col-12">
+      <div class="card bg-dark text-white shadow-sm">
+        <div class="card-body">
+          <h3 class="card-title mb-4">Transaction History</h3>
+          <table class="table table-dark table-hover mt-3">
+            <thead class="thead-light">
+              <tr>
+                <th>Date</th>
+                <th>Type</th>
+                <th>Currency</th>
+                <th>Amount</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="let transaction of pendingTransactions"
+                class="transaction-row"
+              >
+                <td>{{ transaction.date | date }}</td>
+                <td>{{ transaction.type }}</td>
+                <td>{{ transaction.currency }}</td>
+                <td>{{ transaction.amount }}</td>
+                <td>
+                  <span
+                    class="badge"
+                    [ngClass]="{
+                      'badge-success': transaction.isValid,
+                      'badge-danger': !transaction.isValid
+                    }"
+                  >
+                    {{ transaction.isValid ? "Valid" : "Invalid" }}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6 mb-4">
+      <div class="card bg-dark text-white shadow-sm">
+        <div class="card-body">
+          <h3 class="card-title mb-4">Deposit & Withdrawal</h3>
+          <div class="d-flex justify-content-between">
+            <button
+              id="open-deposit-modal-button"
+              class="btn btn-primary"
+              (click)="showDepositModalFunc()"
+            >
+              Deposit
+            </button>
+            <button
+              id="open-withdrawal-modal-button"
+              class="btn btn-primary"
+              (click)="showWithdrawalModalFunc()"
+            >
+              Withdrawal
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+      <div class="card bg-dark text-white shadow-sm">
+        <div class="card-body">
+          <h3 class="card-title mb-4">Transfer</h3>
+          <div class="d-flex justify-content-between">
+            <button
+              id="open-transfer-modal-button"
+              class="btn btn-primary"
+              (click)="showTransferModalFunc()"
+            >
+              Transfer
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-deposit-modal
+    *ngIf="showDepositModal"
+    (close)="showDepositModal = false"
+  ></app-deposit-modal>
+  <app-withdrawal-modal
+    *ngIf="showWithdrawalModal"
+    (close)="showWithdrawalModal = false"
+  ></app-withdrawal-modal>
+  <app-transfer-modal
+    *ngIf="showTransferModal"
+    (close)="showTransferModal = false"
+  ></app-transfer-modal>
+</div>

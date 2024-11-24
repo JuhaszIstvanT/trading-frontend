@@ -1,0 +1,122 @@
+<div
+  class="modal fade show d-block"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="withdrawalModalLabel"
+  aria-modal="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="withdrawalModalLabel">Withdrawal</h5>
+        <button
+          type="button"
+          class="close"
+          aria-label="Close"
+          (click)="closeModal()"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="successMessage" class="alert alert-success">
+          {{ successMessage }}
+        </div>
+        <div *ngIf="errorMessage" class="alert alert-danger">
+          {{ errorMessage }}
+        </div>
+        <form (ngSubmit)="submitWithdrawal()" #withdrawalForm="ngForm">
+          <div class="form-group">
+            <label for="cardNumber">Debit Card Number</label>
+            <input
+              type="text"
+              class="form-control"
+              id="cardNumber"
+              name="cardNumber"
+              placeholder="Enter debit card number"
+              [(ngModel)]="cardNumber"
+              required
+              #cardNumberCtrl="ngModel"
+            />
+            <div
+              *ngIf="
+                !isCardNumberValid &&
+                (cardNumberCtrl.dirty || cardNumberCtrl.touched)
+              "
+              class="text-danger"
+            >
+              Invalid debit card number
+            </div>
+            <div
+              *ngIf="
+                cardNumberCtrl.invalid &&
+                (cardNumberCtrl.dirty || cardNumberCtrl.touched)
+              "
+              class="text-danger"
+            >
+              <div *ngIf="cardNumberCtrl.errors?.required">
+                Debit card number is required
+              </div>
+            </div>
+            <label for="withdrawalCurrency">Currency</label>
+            <select
+              class="form-control"
+              id="withdrawalCurrency"
+              name="withdrawalCurrency"
+              [(ngModel)]="withdrawalCurrency"
+            >
+              <option value="USD">USD</option>
+              <option value="EUR">EUR</option>
+              <option value="BTC">BTC</option>
+              <option value="ETH">ETH</option>
+            </select>
+            <label for="withdrawalAmount">Amount</label>
+            <input
+              type="number"
+              class="form-control"
+              id="withdrawalAmount"
+              name="withdrawalAmount"
+              placeholder="Enter withdrawal amount"
+              min="0"
+              step="0.01"
+              [(ngModel)]="withdrawalAmount"
+              required
+              #withdrawalAmountCtrl="ngModel"
+            />
+            <div
+              *ngIf="
+                withdrawalAmountCtrl.invalid &&
+                (withdrawalAmountCtrl.dirty || withdrawalAmountCtrl.touched)
+              "
+              class="text-danger"
+            >
+              <div *ngIf="withdrawalAmountCtrl.errors?.required">
+                Amount is required
+              </div>
+              <div *ngIf="withdrawalAmountCtrl.errors?.min">
+                Amount must be a positive number
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              (click)="closeModal()"
+            >
+              Close
+            </button>
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="withdrawalForm.invalid"
+            >
+              Withdraw
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-backdrop fade show" (click)="closeModal()"></div>

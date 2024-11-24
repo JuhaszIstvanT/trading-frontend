@@ -1,0 +1,32 @@
+.user-details {
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.section {
+  margin-bottom: 20px;
+}
+
+.loading-message {
+  margin-top: 20px;
+}
+
+table {
+  width: 100%;
+}
+
+th,
+td {
+  padding: 8px;
+}
+
+th {
+  background-color: #007bff;
+  color: #fff;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}

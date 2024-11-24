@@ -1,0 +1,12 @@
+/* leaderboard.component.css */
+.table-dark {
+  background-color: #343a40;
+}
+
+.table-dark thead {
+  background-color: #495057;
+}
+
+.text-success {
+  color: #28a745 !important;
+}
