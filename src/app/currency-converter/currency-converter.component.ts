@@ -17,8 +17,8 @@ export class CurrencyConverterComponent {
   convertedAmount: number = 0;
   successMessage: string = '';
   errorMessage: string = '';
-  selectedCurrencySymbol: string = ''; // Add a property for the symbol
-  amountError: string = ''; // Add a property for amount validation error
+  selectedCurrencySymbol: string = '';
+  amountError: string = '';
 
   private apiKey = 'CG-JzHexe4U5tYy5YeiK8ExpL8y';
 
@@ -33,7 +33,7 @@ export class CurrencyConverterComponent {
     this.route.paramMap.subscribe((params) => {
       this.selectedCurrency = params.get('currency') || 'bitcoin';
       this.convertCurrency();
-      this.fetchCryptoSymbol(); // Fetch the symbol when the component initializes
+      this.fetchCryptoSymbol();
     });
   }
 
@@ -91,7 +91,7 @@ export class CurrencyConverterComponent {
     this.tradeService
       .buyCurrency(
         -1,
-        this.selectedCurrencySymbol, // Use the symbol instead of the name
+        this.selectedCurrencySymbol,
         this.selectedAmount,
         this.targetCurrency,
         this.convertedAmount,

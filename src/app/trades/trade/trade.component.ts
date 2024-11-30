@@ -66,7 +66,7 @@ export class TradeComponent implements OnInit {
   clearSuccessMessage(): void {
     setTimeout(() => {
       this.successMessage = '';
-    }, 1000); // Clear the message after 3 seconds
+    }, 1000);
   }
 
   updateTrades(): void {

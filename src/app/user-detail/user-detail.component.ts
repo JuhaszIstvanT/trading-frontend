@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TradeService } from '../service/trade.service';
-import { FollowService } from '../service/follow.service'; // Import the follow service
+import { FollowService } from '../service/follow.service';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
@@ -21,7 +21,7 @@ export class UserDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private tradeService: TradeService,
-    private followService: FollowService, // Inject the follow service
+    private followService: FollowService,
     private router: Router
   ) {}
 
@@ -29,7 +29,7 @@ export class UserDetailComponent implements OnInit {
     this.route.params.subscribe((params) => {
       this.userId = +params['id'];
       this.loadUserDetail(this.userId);
-      this.checkIfFollowing(this.userId); // Check if the user is already following
+      this.checkIfFollowing(this.userId);
     });
   }
 

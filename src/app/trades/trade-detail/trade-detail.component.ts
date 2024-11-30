@@ -66,7 +66,7 @@ export class TradeDetailComponent implements OnInit {
     this.successMessage = message;
     setTimeout(() => {
       this.successMessage = '';
-    }, 1000); // Clear the message after 3 seconds
+    }, 1000);
   }
 
   refreshTradeDetails(): void {

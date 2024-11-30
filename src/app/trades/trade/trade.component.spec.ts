@@ -84,7 +84,6 @@ describe('TradeComponent', () => {
     expect(tradeServiceMock.getTrades).toHaveBeenCalled();
     expect(component.trades).toEqual(trades);
 
-    // Verify that the trade details are displayed in the table
     const compiled = fixture.nativeElement;
     const tradeRows = compiled.querySelectorAll('.trade-row');
     expect(tradeRows.length).toBe(1);

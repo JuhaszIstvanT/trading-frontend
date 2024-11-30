@@ -27,7 +27,8 @@ describe("Login E2E Test", () => {
       .forBrowser("chrome")
       .setChromeOptions(chromeOptions)
       .build();
-    await driver.get("http://localhost:4200/login");
+    //await driver.get("http://localhost:4200/login");
+    await driver.get("https://lemon-meadow-04d69110f.5.azurestaticapps.net/login");
   });
 
   afterAll(async () => {
@@ -37,7 +38,8 @@ describe("Login E2E Test", () => {
   });
 
   beforeEach(async () => {
-    await driver.get("http://localhost:4200/login");
+    //await driver.get("http://localhost:4200/login");
+    await driver.get("https://lemon-meadow-04d69110f.5.azurestaticapps.net/login");
   });
 
   it("should display login page", async () => {
@@ -50,9 +52,11 @@ describe("Login E2E Test", () => {
     await driver.findElement(By.name("password")).sendKeys("Passwordsara");
     await driver.findElement(By.css('button[type="submit"]')).click();
 
-    await driver.wait(until.urlIs("http://localhost:4200/wallet"), 10000); // Wait up to 10 seconds for the URL to change
+    //await driver.wait(until.urlIs("http://localhost:4200/wallet"), 10000);
+    await driver.wait(until.urlIs("https://lemon-meadow-04d69110f.5.azurestaticapps.net/wallet"), 10000);
     const currentUrl = await driver.getCurrentUrl();
-    expect(currentUrl).toEqual("http://localhost:4200/wallet");
+    //expect(currentUrl).toEqual("http://localhost:4200/wallet");
+    expect(currentUrl).toEqual("https://lemon-meadow-04d69110f.5.azurestaticapps.net/wallet");
   });
 
   it("should show error for incorrect credentials", async () => {
@@ -64,7 +68,7 @@ describe("Login E2E Test", () => {
     await driver.findElement(By.css('button[type="submit"]')).click();
 
     const errorMessageLocator = By.id("error-message");
-    await driver.wait(until.elementLocated(errorMessageLocator), 10000); // Wait up to 10 seconds for the element to appear
+    await driver.wait(until.elementLocated(errorMessageLocator), 10000);
     const errorMsg = await driver.findElement(errorMessageLocator).getText();
     expect(errorMsg).toContain(
       "Invalid username or password. Please try again."

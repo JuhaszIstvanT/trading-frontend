@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css'], // Use styleUrls instead of styleUrl
+  styleUrls: ['./profile.component.css'],
 })
 export class ProfileComponent implements OnInit {
   successMessageProfile: string = '';

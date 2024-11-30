@@ -39,7 +39,7 @@ export class DepositModalComponent {
             (response) => {
               this.successMessage = 'Deposit was successful!';
               this.errorMessage = '';
-              setTimeout(() => this.closeModal(), 1000); // Close the modal after 1 second
+              setTimeout(() => this.closeModal(), 1000);
             },
             (error) => {
               this.errorMessage = 'Deposit failed. Please try again.';

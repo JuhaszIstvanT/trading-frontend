@@ -42,7 +42,7 @@ describe('PaginationComponent', () => {
     component.currentPage = 3;
     spyOn(component.pageChange, 'emit');
 
-    component.goToPage(0); // Invalid page number
+    component.goToPage(0);
 
     expect(component.pageChange.emit).not.toHaveBeenCalled();
   });
@@ -52,7 +52,7 @@ describe('PaginationComponent', () => {
     component.currentPage = 3;
     spyOn(component.pageChange, 'emit');
 
-    component.goToPage(3); // Same as current page
+    component.goToPage(3);
 
     expect(component.pageChange.emit).not.toHaveBeenCalled();
   });

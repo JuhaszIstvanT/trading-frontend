@@ -37,7 +37,7 @@ describe('CurrencyConverterComponent', () => {
     component = fixture.componentInstance;
     httpTestingController = TestBed.inject(HttpTestingController);
 
-    fixture.detectChanges(); // Trigger initial data binding and ngOnInit
+    fixture.detectChanges();
 
     const req = httpTestingController.expectOne(
       'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&apiKey=CG-JzHexe4U5tYy5YeiK8ExpL8y'
