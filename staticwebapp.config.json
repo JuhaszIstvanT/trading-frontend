@@ -5,8 +5,7 @@
       "methods": [
         "get"
       ],
-      "redirect": "/index.html",
-      "statusCode": 200
+      "redirect": "/index.html"
     }
   ]
 }
