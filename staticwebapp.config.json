@@ -1,0 +1,12 @@
+{
+  "routes": [
+    {
+      "route": "/*",
+      "methods": [
+        "get"
+      ],
+      "redirect": "/index.html",
+      "statusCode": 200
+    }
+  ]
+}
