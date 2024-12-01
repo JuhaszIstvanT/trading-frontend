@@ -26,7 +26,7 @@ describe("CurrencyComponent E2E Test", () => {
       .forBrowser("chrome")
       .setChromeOptions(chromeOptions)
       .build();
-    await driver.get("http://localhost:4200/login"); // Navigate to login page
+    await driver.get("http://localhost:4200/login");
 
     // Perform login
     await driver.findElement(By.name("username")).sendKeys("Sara");
@@ -34,7 +34,7 @@ describe("CurrencyComponent E2E Test", () => {
     await driver.findElement(By.css('button[type="submit"]')).click();
 
     // Wait for navigation to /wallet
-    await driver.wait(until.urlIs("http://localhost:4200/wallet"), 10000); // Adjust the URL as needed
+    await driver.wait(until.urlIs("http://localhost:4200/wallet"), 10000);
   });
 
   beforeEach(async () => {

@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { TradeService } from '../service/trade.service';
 import { ActivatedRoute } from '@angular/router';
@@ -20,10 +19,7 @@ export class CurrencyConverterComponent {
   selectedCurrencySymbol: string = '';
   amountError: string = '';
 
-  private apiKey = 'CG-JzHexe4U5tYy5YeiK8ExpL8y';
-
   constructor(
-    private http: HttpClient,
     private tradeService: TradeService,
     private route: ActivatedRoute,
     private marketService: MarketService
@@ -33,31 +29,41 @@ export class CurrencyConverterComponent {
     this.route.paramMap.subscribe((params) => {
       this.selectedCurrency = params.get('currency') || 'bitcoin';
       this.convertCurrency();
-      this.fetchCryptoSymbol();
     });
   }
 
   convertCurrency(): void {
-    const endpoint = `https://api.coingecko.com/api/v3/simple/price?ids=${this.selectedCurrency}&vs_currencies=${this.targetCurrency}&apiKey=${this.apiKey}`;
-    this.http.get<any>(endpoint).subscribe(
-      (data) => {
-        this.selectedCurrencyValue =
-          data[this.selectedCurrency][this.targetCurrency];
-        this.convertedAmount = this.selectedAmount * this.selectedCurrencyValue;
+    this.marketService.fetchTickerData().subscribe(
+      (response) => {
+        const coin = response.data.find(
+          (coin: any) => coin.name.toLowerCase() === this.selectedCurrency.toLowerCase()
+        );
+  
+        if (!coin) {
+          console.error(`Currency ${this.selectedCurrency} not found.`);
+          return;
+        }
+  
+        this.marketService.fetchSpecificTickerData(coin.id).subscribe(
+          (data) => {
+            if (data.length === 0) {
+              console.error(`Price data for ${this.selectedCurrency} not found.`);
+              return;
+            }
+  
+            this.selectedCurrencyValue = +data[0].price_usd;
+            this.convertedAmount = this.selectedAmount * this.selectedCurrencyValue;
+            this.selectedCurrencySymbol = coin.symbol;
+  
+            console.log(`Converted Amount: ${this.convertedAmount}`);
+          },
+          (error) => {
+            console.error('Error fetching price for currency:', error);
+          }
+        );
       },
       (error) => {
-        console.error('Error fetching currency conversion:', error);
-      }
-    );
-  }
-
-  fetchCryptoSymbol(): void {
-    this.marketService.getCryptoDetails(this.selectedCurrency).subscribe(
-      (data) => {
-        this.selectedCurrencySymbol = data.symbol.toUpperCase();
-      },
-      (error) => {
-        console.error('Error fetching cryptocurrency symbol:', error);
+        console.error('Error fetching currency data:', error);
       }
     );
   }

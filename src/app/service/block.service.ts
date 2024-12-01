@@ -8,7 +8,7 @@ import { environment } from '../../environments/environment';
   providedIn: 'root',
 })
 export class BlockService {
-  private apiUrl = `${environment.apiUrl}/Block`;
+  private apiUrl = `${environment.local}/Block`;
 
   constructor(private http: HttpClient) {}
 

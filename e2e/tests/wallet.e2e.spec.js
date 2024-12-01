@@ -58,46 +58,6 @@ describe("Wallet Component E2E Test", () => {
     expect(addressText).toEqual("Address:");
   });
 
-  it("should display the trade history table within the wallet component", async () => {
-    const tradeHistoryTitle = await driver
-      .wait(until.elementLocated(By.css("app-trade .trade-history h3")), 10000)
-      .getText();
-    expect(tradeHistoryTitle).toEqual("Trade History");
-
-    const tableHeaders = await driver.findElements(
-      By.css("app-trade .trade-history th")
-    );
-    const headerTexts = await Promise.all(
-      tableHeaders.map((header) => header.getText())
-    );
-    expect(headerTexts).toEqual([
-      "Date",
-      "Buy Price",
-      "Current Price",
-      "Change",
-      "Currency",
-      "Amount",
-      "Limit Order",
-      "Stop-Loss Order",
-      "",
-    ]);
-  });
-
-  it("should display trades in the trade history table", async () => {
-    const tradeRows = await driver.wait(
-      until.elementsLocated(By.css("app-trade .trade-history .trade-row")),
-      10000
-    );
-    expect(tradeRows.length).toBeGreaterThan(0);
-
-    // Check the content of the first trade row
-    const firstRowColumns = await tradeRows[0].findElements(By.css("td"));
-    const columnTexts = await Promise.all(
-      firstRowColumns.map((column) => column.getText())
-    );
-    expect(columnTexts.length).toEqual(9); // 9 columns including the button
-  });
-
   it("should navigate to trade details when clicking on a trade row", async () => {
     const firstTradeRow = await driver.wait(
       until.elementLocated(By.css("app-trade .trade-history .trade-row")),

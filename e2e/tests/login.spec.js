@@ -27,8 +27,7 @@ describe("Login E2E Test", () => {
       .forBrowser("chrome")
       .setChromeOptions(chromeOptions)
       .build();
-    //await driver.get("http://localhost:4200/login");
-    await driver.get("https://lemon-meadow-04d69110f.5.azurestaticapps.net/login");
+    await driver.get("http://localhost:4200/login");
   });
 
   afterAll(async () => {
@@ -38,8 +37,7 @@ describe("Login E2E Test", () => {
   });
 
   beforeEach(async () => {
-    //await driver.get("http://localhost:4200/login");
-    await driver.get("https://lemon-meadow-04d69110f.5.azurestaticapps.net/login");
+    await driver.get("http://localhost:4200/login");
   });
 
   it("should display login page", async () => {
@@ -52,11 +50,9 @@ describe("Login E2E Test", () => {
     await driver.findElement(By.name("password")).sendKeys("Passwordsara");
     await driver.findElement(By.css('button[type="submit"]')).click();
 
-    //await driver.wait(until.urlIs("http://localhost:4200/wallet"), 10000);
-    await driver.wait(until.urlIs("https://lemon-meadow-04d69110f.5.azurestaticapps.net/wallet"), 10000);
+    await driver.wait(until.urlIs("http://localhost:4200/wallet"), 10000);
     const currentUrl = await driver.getCurrentUrl();
-    //expect(currentUrl).toEqual("http://localhost:4200/wallet");
-    expect(currentUrl).toEqual("https://lemon-meadow-04d69110f.5.azurestaticapps.net/wallet");
+    expect(currentUrl).toEqual("http://localhost:4200/wallet");
   });
 
   it("should show error for incorrect credentials", async () => {

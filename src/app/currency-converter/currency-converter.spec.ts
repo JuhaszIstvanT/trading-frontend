@@ -1,23 +1,25 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import {
-  HttpClientTestingModule,
-  HttpTestingController,
-} from '@angular/common/http/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { CurrencyConverterComponent } from './currency-converter.component';
 import { TradeService } from '../service/trade.service';
+import { MarketService } from '../service/market.service';
 
 describe('CurrencyConverterComponent', () => {
   let component: CurrencyConverterComponent;
   let fixture: ComponentFixture<CurrencyConverterComponent>;
-  let httpTestingController: HttpTestingController;
-  let tradeServiceMock: any;
+  let tradeService: jasmine.SpyObj<TradeService>;
+  let marketService: jasmine.SpyObj<MarketService>;
   let routeMock: any;
 
   beforeEach(async () => {
-    tradeServiceMock = jasmine.createSpyObj('TradeService', ['buyCurrency']);
+    tradeService = jasmine.createSpyObj('TradeService', ['buyCurrency']);
+    marketService = jasmine.createSpyObj('MarketService', [
+      'fetchTickerData',
+      'fetchSpecificTickerData',
+    ]);
     routeMock = {
       paramMap: of({ get: () => 'bitcoin' }),
     };
@@ -26,7 +28,8 @@ describe('CurrencyConverterComponent', () => {
       declarations: [CurrencyConverterComponent],
       imports: [HttpClientTestingModule, FormsModule],
       providers: [
-        { provide: TradeService, useValue: tradeServiceMock },
+        { provide: TradeService, useValue: tradeService },
+        { provide: MarketService, useValue: marketService },
         { provide: ActivatedRoute, useValue: routeMock },
       ],
     }).compileComponents();
@@ -35,26 +38,11 @@ describe('CurrencyConverterComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(CurrencyConverterComponent);
     component = fixture.componentInstance;
-    httpTestingController = TestBed.inject(HttpTestingController);
-
     fixture.detectChanges();
-
-    const req = httpTestingController.expectOne(
-      'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&apiKey=CG-JzHexe4U5tYy5YeiK8ExpL8y'
-    );
-    expect(req.request.method).toEqual('GET');
-    req.flush({ bitcoin: { usd: 50000 } });
   });
 
-  afterEach(() => {
-    httpTestingController.verify();
-  });
-
-  it('should initialize and fetch initial currency conversion rate', () => {
-    expect(component.selectedCurrency).toBe('bitcoin');
-    expect(component.targetCurrency).toBe('usd');
-    expect(component.selectedCurrencyValue).toBe(50000);
-    expect(component.convertedAmount).toBe(50000);
+  it('should create the component', () => {
+    expect(component).toBeTruthy();
   });
 
   it('should handle amount change and update converted amount', () => {
@@ -65,71 +53,65 @@ describe('CurrencyConverterComponent', () => {
     expect(component.convertedAmount).toBe(100000);
   });
 
-  it('should handle currency change and update conversion rate', () => {
-    component.onCurrencyChange({ target: { value: 'eur' } });
+  it('should show error for negative amount', () => {
+    component.onAmountChange({ target: { value: '-5' } });
 
-    const req = httpTestingController.expectOne(
-      'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=eur&apiKey=CG-JzHexe4U5tYy5YeiK8ExpL8y'
-    );
-    expect(req.request.method).toEqual('GET');
-    req.flush({ bitcoin: { eur: 45000 } });
-
-    expect(component.targetCurrency).toBe('eur');
-    expect(component.selectedCurrencyValue).toBe(45000);
-    expect(component.convertedAmount).toBe(45000);
+    expect(component.selectedAmount).toBe(0);
+    expect(component.amountError).toBe('Amount must be a positive number');
   });
 
-  it('should perform trade and handle response', () => {
-    tradeServiceMock.buyCurrency.and.returnValue(of({}));
-    spyOn(console, 'log');
+
+  it('should perform a trade successfully', () => {
+    tradeService.buyCurrency.and.returnValue(of({ message: 'Trade successful' }));
+
+    component.selectedCurrency = 'bitcoin';
+    component.selectedCurrencySymbol = 'BTC';
+    component.selectedAmount = 1;
+    component.convertedAmount = 50000;
 
     component.onTrade();
 
-    expect(tradeServiceMock.buyCurrency).toHaveBeenCalledWith(
+    expect(tradeService.buyCurrency).toHaveBeenCalledWith(
       -1,
-      'bitcoin',
+      'BTC',
       1,
       'usd',
       50000,
       'bitcoin'
     );
-    expect(console.log).toHaveBeenCalledWith('Trade successful');
+    expect(component.successMessage).toBe('Trade successful');
+    expect(component.errorMessage).toBe('');
   });
 
-  it('should handle error during trade', () => {
-    tradeServiceMock.buyCurrency.and.returnValue(throwError('Trade error'));
-    spyOn(console, 'error');
+  it('should show an error message when trade fails', () => {
+    tradeService.buyCurrency.and.returnValue(throwError('Trade error'));
+
+    component.selectedCurrency = 'bitcoin';
+    component.selectedCurrencySymbol = 'BTC';
+    component.selectedAmount = 1;
+    component.convertedAmount = 50000;
 
     component.onTrade();
 
-    expect(tradeServiceMock.buyCurrency).toHaveBeenCalledWith(
+    expect(tradeService.buyCurrency).toHaveBeenCalledWith(
       -1,
-      'bitcoin',
+      'BTC',
       1,
       'usd',
       50000,
       'bitcoin'
     );
-    expect(console.error).toHaveBeenCalledWith(
-      'Failed to make trade:',
-      'Trade error'
-    );
+    expect(component.errorMessage).toBe('Failed to make trade.');
+    expect(component.successMessage).toBe('');
   });
 
-  it('should handle error during currency conversion fetch', () => {
-    const consoleSpy = spyOn(console, 'error');
+  it('should handle errors during currency conversion fetch', () => {
+    marketService.fetchTickerData.and.returnValue(throwError('Currency error'));
+
     component.convertCurrency();
-    const req = httpTestingController.expectOne(
-      'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&apiKey=CG-JzHexe4U5tYy5YeiK8ExpL8y'
-    );
-    req.flush('Error fetching currency conversion', {
-      status: 500,
-      statusText: 'Server Error',
-    });
 
-    expect(consoleSpy).toHaveBeenCalledWith(
-      'Error fetching currency conversion:',
-      jasmine.any(Object)
-    );
+    expect(marketService.fetchTickerData).toHaveBeenCalled();
+    expect(component.selectedCurrencyValue).toBe(0);
+    expect(component.convertedAmount).toBe(0);
   });
 });

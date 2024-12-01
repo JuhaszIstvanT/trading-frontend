@@ -14,7 +14,6 @@
         <th>Change</th>
         <th>Currency</th>
         <th>Amount</th>
-        <th>Limit Order</th>
         <th>Stop-Loss Order</th>
         <th></th>
       </tr>
@@ -40,7 +39,6 @@
         </td>
         <td>{{ trade.symbol }}</td>
         <td>{{ trade.amount }}</td>
-        <td>{{ trade.limitOrderActive ? "Placed" : "Not Placed" }}</td>
         <td>{{ trade.stopLossOrderActive ? "Placed" : "Not Placed" }}</td>
         <td>
           <button

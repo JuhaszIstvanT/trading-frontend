@@ -30,7 +30,7 @@ export class TradeDetailComponent implements OnInit {
         this.trade = trade;
 
         this.marketService
-          .fetchCurrentPrice(this.trade.name, this.trade.buyCurrency)
+          .fetchCurrentPrice(this.trade.name)
           .subscribe(
             (price) => {
               this.actualPrice = price * this.trade.amount;

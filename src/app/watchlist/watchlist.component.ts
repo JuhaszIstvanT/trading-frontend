@@ -34,10 +34,10 @@ export class WatchlistComponent {
   updateWatchlist(): void {
     this.tradeService.getWatchlist().subscribe((watchlist) => {
       this.currencies = this.currencies.filter((currency) =>
-        watchlist.includes(currency.symbol)
+        watchlist.includes(currency.symbol.toLocaleLowerCase())
       );
       this.currencies = this.currencies.map((currency) => {
-        currency.is_watchlist_elem = watchlist.includes(currency.symbol);
+        currency.is_watchlist_elem = watchlist.includes(currency.symbol.toLocaleLowerCase());
         return currency;
       });
     });
@@ -46,7 +46,7 @@ export class WatchlistComponent {
   }
 
   onRemoveWatchlistElem(currency: CurrencyInfo): void {
-    this.tradeService.removeWatchlistElem(currency.symbol).subscribe(
+    this.tradeService.removeWatchlistElem(currency.symbol.toLocaleLowerCase()).subscribe(
       () => {
         this.updateWatchlist();
       },

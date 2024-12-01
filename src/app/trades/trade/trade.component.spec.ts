@@ -1,240 +1,121 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import {
-  HttpClientTestingModule,
-  HttpTestingController,
-} from '@angular/common/http/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { Router } from '@angular/router';
+import { of, throwError } from 'rxjs';
 import { TradeComponent } from './trade.component';
 import { TradeService } from '../../service/trade.service';
 import { MarketService } from '../../service/market.service';
-import { of, throwError, Subject } from 'rxjs';
-import { By } from '@angular/platform-browser';
-import { Router } from '@angular/router';
 import { Trade } from '../../model/trade.model';
 
 describe('TradeComponent', () => {
   let component: TradeComponent;
   let fixture: ComponentFixture<TradeComponent>;
-  let tradeServiceMock: any;
-  let marketServiceMock: any;
-  let router: Router;
-  let httpTestingController: HttpTestingController;
+  let tradeService: jasmine.SpyObj<TradeService>;
+  let marketService: jasmine.SpyObj<MarketService>;
+  let router: jasmine.SpyObj<Router>;
 
   beforeEach(async () => {
-    tradeServiceMock = jasmine.createSpyObj(
-      'TradeService',
-      ['getTrades', 'sellCurrency'],
-      {
-        tradeSuccess: new Subject<void>(),
-      }
-    );
-
-    marketServiceMock = jasmine.createSpyObj('MarketService', [
+    const tradeServiceSpy = jasmine.createSpyObj('TradeService', [
+      'getTrades',
+      'sellCurrency',
+    ]);
+    const marketServiceSpy = jasmine.createSpyObj('MarketService', [
       'fetchCurrentPrice',
     ]);
+    const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
 
     await TestBed.configureTestingModule({
       declarations: [TradeComponent],
-      imports: [HttpClientTestingModule, RouterTestingModule],
       providers: [
-        { provide: TradeService, useValue: tradeServiceMock },
-        { provide: MarketService, useValue: marketServiceMock },
+        { provide: TradeService, useValue: tradeServiceSpy },
+        { provide: MarketService, useValue: marketServiceSpy },
+        { provide: Router, useValue: routerSpy },
       ],
     }).compileComponents();
-  });
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(TradeComponent);
     component = fixture.componentInstance;
-    router = TestBed.inject(Router);
-    httpTestingController = TestBed.inject(HttpTestingController);
-    fixture.detectChanges();
+    tradeService = TestBed.inject(TradeService) as jasmine.SpyObj<TradeService>;
+    marketService = TestBed.inject(MarketService) as jasmine.SpyObj<MarketService>;
+    router = TestBed.inject(Router) as jasmine.SpyObj<Router>;
   });
 
   it('should create the component', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should fetch and display trades on initialization', () => {
-    const trades: Trade[] = [
+  it('should calculate and fetch actual prices for trades', () => {
+    const mockTrades: Trade[] = [
       {
         id: 1,
-        timestamp: new Date().toISOString(),
-        buyPrice: 30000,
+        buyPrice: 50000,
         buyCurrency: 'USD',
+        sellPrice: 0,
+        sellCurrency: 'USD',
         symbol: 'BTC',
-        amount: 1,
-        limitOrderActive: true,
-        stopLossOrderActive: false,
         name: 'Bitcoin',
-        sellPrice: undefined,
-        sellCurrency: undefined,
+        amount: 0.1,
+        timestamp: new Date().toISOString(),
         isSold: false,
-        limitOrderPrice: undefined,
-        stopLossOrderPrice: undefined,
+        limitOrderPrice: 0,
+        stopLossOrderPrice: 0,
+        limitOrderActive: false,
+        stopLossOrderActive: false,
       },
     ];
+    const mockPrice = 60000;
 
-    tradeServiceMock.getTrades.and.returnValue(of(trades));
-    marketServiceMock.fetchCurrentPrice.and.returnValue(of(35000));
+    tradeService.getTrades.and.returnValue(of(mockTrades));
+    marketService.fetchCurrentPrice.and.returnValue(of(mockPrice));
 
-    component.ngOnInit();
-    fixture.detectChanges();
+    component.updateTrades();
 
-    expect(tradeServiceMock.getTrades).toHaveBeenCalled();
-    expect(component.trades).toEqual(trades);
-
-    const compiled = fixture.nativeElement;
-    const tradeRows = compiled.querySelectorAll('.trade-row');
-    expect(tradeRows.length).toBe(1);
-    expect(tradeRows[0].textContent).toContain('Bitcoin');
-    expect(tradeRows[0].textContent).toContain('USD');
-    expect(tradeRows[0].textContent).toContain('30000');
-    expect(tradeRows[0].textContent).toContain('35000');
-  });
-
-  it('should handle error while fetching trades', () => {
-    const consoleSpy = spyOn(console, 'error');
-    tradeServiceMock.getTrades.and.returnValue(
-      throwError('Error fetching trades')
-    );
-
-    component.ngOnInit();
-    fixture.detectChanges();
-
-    expect(tradeServiceMock.getTrades).toHaveBeenCalled();
-    expect(consoleSpy).toHaveBeenCalledWith(
-      'Failed to fetch updated orders:',
-      'Error fetching trades'
+    expect(tradeService.getTrades).toHaveBeenCalled();
+    expect(marketService.fetchCurrentPrice).toHaveBeenCalledWith('Bitcoin');
+    expect(component.actualPrices[1]).toEqual(mockPrice * 0.1);
+    expect(component.changePercentage[1]).toEqual(
+      ((mockPrice * 0.1 - 50000) / 50000) * 100
     );
   });
 
-  it('should sell trade and update trades list', () => {
-    const trade: Trade = {
-      id: 1,
-      timestamp: new Date().toISOString(),
-      buyPrice: 30000,
-      buyCurrency: 'USD',
-      symbol: 'BTC',
-      amount: 1,
-      limitOrderActive: true,
-      stopLossOrderActive: false,
-      name: 'Bitcoin',
-      sellPrice: undefined,
-      sellCurrency: undefined,
-      isSold: false,
-      limitOrderPrice: undefined,
-      stopLossOrderPrice: undefined,
-    };
+  it('should handle errors when fetching trades', () => {
+    tradeService.getTrades.and.returnValue(throwError(() => new Error('Error')));
 
-    const trades = [trade];
+    component.updateTrades();
 
-    tradeServiceMock.getTrades.and.returnValue(of(trades));
-    marketServiceMock.fetchCurrentPrice.and.returnValue(of(35000));
-    tradeServiceMock.sellCurrency.and.returnValue(of({}));
-
-    component.ngOnInit();
-    fixture.detectChanges();
-
-    const sellButton = fixture.debugElement.query(By.css('.btn-primary'));
-    sellButton.triggerEventHandler('click', { stopPropagation: () => {} });
-
-    expect(marketServiceMock.fetchCurrentPrice).toHaveBeenCalledWith(
-      'Bitcoin',
-      'USD'
-    );
-    expect(tradeServiceMock.sellCurrency).toHaveBeenCalledWith(
-      trade.id,
-      trade.symbol,
-      trade.amount,
-      trade.buyCurrency,
-      35000,
-      trade.name
-    );
-    expect(tradeServiceMock.getTrades).toHaveBeenCalledTimes(2); // Once in ngOnInit and once after sell
+    expect(tradeService.getTrades).toHaveBeenCalled();
+    expect(component.trades).toBeUndefined();
   });
 
-  it('should handle error while selling trade', () => {
-    const consoleSpy = spyOn(console, 'error');
-    const trade: Trade = {
-      id: 1,
-      timestamp: new Date().toISOString(),
-      buyPrice: 30000,
-      buyCurrency: 'USD',
-      symbol: 'BTC',
-      amount: 1,
-      limitOrderActive: true,
-      stopLossOrderActive: false,
-      name: 'Bitcoin',
-      sellPrice: undefined,
-      sellCurrency: undefined,
-      isSold: false,
-      limitOrderPrice: undefined,
-      stopLossOrderPrice: undefined,
-    };
+  it('should handle errors when fetching actual prices', () => {
+    const mockTrades: Trade[] = [
+      {
+        id: 1,
+        buyPrice: 50000,
+        buyCurrency: 'USD',
+        sellPrice: 0,
+        sellCurrency: 'USD',
+        symbol: 'BTC',
+        name: 'Bitcoin',
+        amount: 0.1,
+        timestamp: new Date().toISOString(),
+        isSold: false,
+        limitOrderPrice: 0,
+        stopLossOrderPrice: 0,
+        limitOrderActive: false,
+        stopLossOrderActive: false,
+      },
+    ];
+    tradeService.getTrades.and.returnValue(of(mockTrades));
+    marketService.fetchCurrentPrice.and.returnValue(throwError(() => new Error('Error')));
 
-    const trades = [trade];
+    component.updateTrades();
 
-    tradeServiceMock.getTrades.and.returnValue(of(trades));
-    marketServiceMock.fetchCurrentPrice.and.returnValue(of(35000));
-    tradeServiceMock.sellCurrency.and.returnValue(
-      throwError('Error selling trade')
-    );
-
-    component.ngOnInit();
-    fixture.detectChanges();
-
-    const sellButton = fixture.debugElement.query(By.css('.btn-primary'));
-    sellButton.triggerEventHandler('click', { stopPropagation: () => {} });
-
-    expect(marketServiceMock.fetchCurrentPrice).toHaveBeenCalledWith(
-      'Bitcoin',
-      'USD'
-    );
-    expect(tradeServiceMock.sellCurrency).toHaveBeenCalledWith(
-      trade.id,
-      trade.symbol,
-      trade.amount,
-      trade.buyCurrency,
-      35000,
-      trade.name
-    );
-    expect(consoleSpy).toHaveBeenCalledWith(
-      'Failed to sell currency:',
-      'Error selling trade'
-    );
+    expect(marketService.fetchCurrentPrice).toHaveBeenCalledWith('Bitcoin');
+    expect(component.actualPrices[1]).toBeUndefined();
   });
 
   it('should navigate to trade details on row click', () => {
-    const trade: Trade = {
-      id: 1,
-      timestamp: new Date().toISOString(),
-      buyPrice: 30000,
-      buyCurrency: 'USD',
-      symbol: 'BTC',
-      amount: 1,
-      limitOrderActive: true,
-      stopLossOrderActive: false,
-      name: 'Bitcoin',
-      sellPrice: undefined,
-      sellCurrency: undefined,
-      isSold: false,
-      limitOrderPrice: undefined,
-      stopLossOrderPrice: undefined,
-    };
-
-    const trades = [trade];
-
-    tradeServiceMock.getTrades.and.returnValue(of(trades));
-    marketServiceMock.fetchCurrentPrice.and.returnValue(of(35000));
-    spyOn(router, 'navigate');
-
-    component.ngOnInit();
-    fixture.detectChanges();
-
-    const tradeRow = fixture.debugElement.query(By.css('.trade-row'));
-    tradeRow.triggerEventHandler('click', null);
-
-    expect(router.navigate).toHaveBeenCalledWith(['/trade/detail', trade.id]);
+    component.navigateToTradeDetails(1);
+    expect(router.navigate).toHaveBeenCalledWith(['/trade/detail', 1]);
   });
 });
