@@ -3,4 +3,8 @@
     "rewrite": "/index.html",
     "exclude": ["/images/*.{png,jpg,gif}", "/css/*"]
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 2f0ecfa0b1a6b5ed40f960ead761f5c7c138da96
