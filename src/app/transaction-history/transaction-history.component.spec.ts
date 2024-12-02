@@ -46,7 +46,7 @@ describe('TransactionHistoryComponent', () => {
     mockWalletService.getTransactionHistory.and.returnValue(
       of(mockTransactions)
     );
-    fixture.detectChanges(); // This triggers ngOnInit
+    fixture.detectChanges();
   });
 
   it('should create', () => {

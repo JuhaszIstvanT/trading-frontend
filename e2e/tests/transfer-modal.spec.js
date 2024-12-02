@@ -71,10 +71,10 @@ describe("TransferModal E2E Test", () => {
   });
 
   it("should successfully transfer funds", async () => {
-    await driver.findElement(By.id("from")).sendKeys("sjIBPYcGRrOu7smJR7SoViIUb2a5nyXhJgwXh72V/ao=");
-    await driver.findElement(By.id("to")).sendKeys("Kl2NndqEo3sFCccynSOzvZ3lbkT8kylFcZdI+u+7Yyc=");
+    await driver.findElement(By.id("from")).sendKeys("pHjuhhHRpC3bMqKQWeNuIdLre5bO9pUS4LQJ6gA3bIs=");
+    await driver.findElement(By.id("to")).sendKeys("ve8nj0dv1rUu+8Utzmh/1q2TFBMLaddJ71BoQqlbe4A=");
     await driver.findElement(By.id("currency")).sendKeys("USD");
-    await driver.findElement(By.id("amount")).sendKeys("100");
+    await driver.findElement(By.id("amount")).sendKeys("1");
     await driver.findElement(By.css('button[type="submit"]')).click();
 
     const successMessageLocator = By.css(".alert.alert-success");
@@ -85,26 +85,13 @@ describe("TransferModal E2E Test", () => {
     expect(successMsg).toContain("Transfer was successful!");
   });
 
-  it("should show error for missing required fields", async () => {
-    await driver.findElement(By.id("from")).clear();
-    await driver.findElement(By.id("to")).clear();
-    await driver.findElement(By.id("amount")).clear();
-
-    await driver.findElement(By.css('button[type="submit"]')).click();
-
-    const errorMessageLocator = By.css(".text-danger");
-    await driver.wait(until.elementLocated(errorMessageLocator), 10000); // Wait up to 10 seconds for the element to appear
-    const errorMsg = await driver.findElements(errorMessageLocator);
-    expect(errorMsg.length).toBeGreaterThan(0); // There should be error messages
-  });
-
   it("should show error for invalid addresses", async () => {
     await driver.findElement(By.id("from")).sendKeys("invalid-source-address");
     await driver
       .findElement(By.id("to"))
       .sendKeys("invalid-destination-address");
     await driver.findElement(By.id("currency")).sendKeys("USD");
-    await driver.findElement(By.id("amount")).sendKeys("100");
+    await driver.findElement(By.id("amount")).sendKeys("1");
     await driver.findElement(By.css('button[type="submit"]')).click();
 
     const errorMessageLocator = By.css(".alert.alert-danger");

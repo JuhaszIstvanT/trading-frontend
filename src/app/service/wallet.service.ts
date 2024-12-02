@@ -8,7 +8,7 @@ import { environment } from '../../environments/environment';
 })
 export class WalletService {
   transactionSuccess: EventEmitter<any> = new EventEmitter();
-  private apiUrl = `${environment.apiUrl}/Wallet`;
+  private apiUrl = `${environment.local}/Wallet`;
 
   constructor(private http: HttpClient) {}
 

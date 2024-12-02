@@ -1,6 +1,5 @@
 export class CurrencyInfo {
   constructor(
-    public image: string,
     public market_cap_rank: number,
     public name: string,
     public symbol: string,

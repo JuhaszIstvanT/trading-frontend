@@ -26,7 +26,7 @@ describe("DepositModal E2E Test", () => {
       .forBrowser("chrome")
       .setChromeOptions(chromeOptions)
       .build();
-    await driver.get("http://localhost:4200/login"); // Navigate to login page
+    await driver.get("http://localhost:4200/login");
 
     // Perform login
     await driver.findElement(By.name("username")).sendKeys("Sara");
@@ -34,7 +34,7 @@ describe("DepositModal E2E Test", () => {
     await driver.findElement(By.css('button[type="submit"]')).click();
 
     // Wait for navigation to /wallet
-    await driver.wait(until.urlIs("http://localhost:4200/wallet")); // Adjust the URL as needed
+    await driver.wait(until.urlIs("http://localhost:4200/wallet"));
   });
 
   afterAll(async () => {
@@ -71,7 +71,7 @@ describe("DepositModal E2E Test", () => {
   });
 
   it("should successfully deposit funds", async () => {
-    await driver.findElement(By.id("cardNumber")).sendKeys("4111111111111111"); // Valid card number for testing
+    await driver.findElement(By.id("cardNumber")).sendKeys("9688641596858705"); // Valid card number for testing
     await driver.findElement(By.id("currency")).sendKeys("USD");
     await driver.findElement(By.id("depositAmount")).sendKeys("100");
     await driver.findElement(By.css('button[type="submit"]')).click();
@@ -95,19 +95,6 @@ describe("DepositModal E2E Test", () => {
     const errorMsg = await driver.findElement(errorMessageLocator).getText();
     expect(errorMsg).toContain("Invalid debit card number");
   });
-
-  // it("should show error for missing required fields", async () => {
-  //   await driver.findElement(By.id("cardNumber")).clear();
-  //   await driver.findElement(By.id("currency")).clear();
-  //   await driver.findElement(By.id("depositAmount")).clear();
-
-  //   await driver.findElement(By.css('button[type="submit"]')).click();
-
-  //   const errorMessageLocator = By.css(".text-danger");
-  //   await driver.wait(until.elementLocated(errorMessageLocator), 10000); // Wait up to 10 seconds for the element to appear
-  //   const errorMsg = await driver.findElements(errorMessageLocator);
-  //   expect(errorMsg.length).toBeGreaterThan(0); // There should be error messages
-  // });
 });
 
 jasmine.execute();

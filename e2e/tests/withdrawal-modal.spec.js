@@ -71,9 +71,9 @@ describe("WithdrawalModal E2E Test", () => {
   });
 
   it("should successfully withdraw funds", async () => {
-    await driver.findElement(By.id("cardNumber")).sendKeys("4111111111111111"); // Valid card number for testing
+    await driver.findElement(By.id("cardNumber")).sendKeys("9688641596858705"); // Valid card number for testing
     await driver.findElement(By.id("withdrawalCurrency")).sendKeys("USD");
-    await driver.findElement(By.id("withdrawalAmount")).sendKeys("100");
+    await driver.findElement(By.id("withdrawalAmount")).sendKeys("1");
     await driver.findElement(By.css('button[type="submit"]')).click();
 
     const successMessageLocator = By.css(".alert.alert-success");
@@ -87,7 +87,7 @@ describe("WithdrawalModal E2E Test", () => {
   it("should show error for invalid card number", async () => {
     await driver.findElement(By.id("cardNumber")).sendKeys("1234567890123456"); // Invalid card number
     await driver.findElement(By.id("withdrawalCurrency")).sendKeys("USD");
-    await driver.findElement(By.id("withdrawalAmount")).sendKeys("100");
+    await driver.findElement(By.id("withdrawalAmount")).sendKeys("1");
     await driver.findElement(By.css('button[type="submit"]')).click();
 
     const errorMessageLocator = By.css(".text-danger");

@@ -7,7 +7,7 @@ import { environment } from '../../environments/environment';
   providedIn: 'root',
 })
 export class FollowService {
-  private apiUrl = `${environment.apiUrl}/Follow`;
+  private apiUrl = `${environment.local}/Follow`;
 
   constructor(private http: HttpClient) {}
 

@@ -50,7 +50,7 @@ describe("Login E2E Test", () => {
     await driver.findElement(By.name("password")).sendKeys("Passwordsara");
     await driver.findElement(By.css('button[type="submit"]')).click();
 
-    await driver.wait(until.urlIs("http://localhost:4200/wallet"), 10000); // Wait up to 10 seconds for the URL to change
+    await driver.wait(until.urlIs("http://localhost:4200/wallet"), 10000);
     const currentUrl = await driver.getCurrentUrl();
     expect(currentUrl).toEqual("http://localhost:4200/wallet");
   });
@@ -64,7 +64,7 @@ describe("Login E2E Test", () => {
     await driver.findElement(By.css('button[type="submit"]')).click();
 
     const errorMessageLocator = By.id("error-message");
-    await driver.wait(until.elementLocated(errorMessageLocator), 10000); // Wait up to 10 seconds for the element to appear
+    await driver.wait(until.elementLocated(errorMessageLocator), 10000);
     const errorMsg = await driver.findElement(errorMessageLocator).getText();
     expect(errorMsg).toContain(
       "Invalid username or password. Please try again."

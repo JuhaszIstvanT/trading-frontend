@@ -44,8 +44,8 @@ describe("Register E2E Test", () => {
   });
 
   it("should register successfully", async () => {
-    await driver.findElement(By.id("username")).sendKeys("newuseafaadar");
-    await driver.findElement(By.id("email")).sendKeys("newuser@example.com");
+    await driver.findElement(By.id("username")).sendKeys("newuseafaaddar");
+    await driver.findElement(By.id("email")).sendKeys("newuser@examplew.com");
     await driver.findElement(By.id("password")).sendKeys("newpassword");
     await driver.findElement(By.css('button[type="submit"]')).click();
 

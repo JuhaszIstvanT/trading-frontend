@@ -2,7 +2,6 @@
   <div class="col-12">
     <h2 class="text-center mb-4">Market Summary</h2>
     <div class="row">
-      <!-- Market Overview Card -->
       <div class="col-md-6 mb-4">
         <div class="card bg-dark text-white h-100">
           <div class="card-body">
@@ -20,46 +19,6 @@
                 <h4>Total Volume (USD)</h4>
                 <p>{{ totalVolume | number : "1.2-2" }}</p>
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Trending Cryptocurrencies Card -->
-      <div class="col-md-6 mb-4">
-        <div class="card bg-dark text-white h-100">
-          <div class="card-body">
-            <h3 class="card-title">Trending Cryptocurrencies</h3>
-            <div *ngIf="trendingCurrencies.length > 0" class="trending-cryptos">
-              <div
-                *ngFor="let currency of trendingCurrencies"
-                class="trending-crypto d-flex align-items-center mb-3"
-              >
-                <img
-                  [src]="currency.item.thumb"
-                  alt="{{ currency.item.name }}"
-                  width="50"
-                  height="50"
-                  class="me-3"
-                />
-                <div class="flex-grow-1">
-                  <span class="d-block">{{ currency.item.name }}</span>
-                  <span class="d-block"
-                    >Price Change (24h):
-                    {{
-                      currency.item.data.price_change_percentage_24h.usd
-                    }}%</span
-                  >
-                </div>
-                <img
-                  [src]="currency.item.data.sparkline"
-                  alt="Sparkline"
-                  width="200"
-                  class="ms-3"
-                />
-              </div>
-            </div>
-            <div *ngIf="trendingCurrencies.length === 0" class="text-center">
-              <p>No trending cryptocurrencies at the moment.</p>
             </div>
           </div>
         </div>

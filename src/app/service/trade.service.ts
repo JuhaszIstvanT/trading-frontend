@@ -8,8 +8,8 @@ import { environment } from '../../environments/environment';
   providedIn: 'root',
 })
 export class TradeService {
-  private apiUrl = `${environment.apiUrl}/Trade`;
-  private apiUrlWatchlist = `${environment.apiUrl}/Watchlist`;
+  private apiUrl = `${environment.local}/Trade`;
+  private apiUrlWatchlist = `${environment.local}/Watchlist`;
   tradeSuccess: EventEmitter<any> = new EventEmitter();
 
   constructor(private http: HttpClient) {}
@@ -36,19 +36,6 @@ export class TradeService {
     return this.http.get<Trade>(`${this.apiUrl}/trade/${tradeId}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-  }
-
-  placeLimitOrder(tradeId: number, limitOrderPrice: number): Observable<void> {
-    const token = localStorage.getItem('token');
-
-    const url = `${this.apiUrl}/trade/${tradeId}/limitorder`;
-    return this.http.post<void>(
-      url,
-      { price: limitOrderPrice },
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
   }
 
   placeStopLossOrder(
@@ -104,7 +91,7 @@ export class TradeService {
 
     return this.http.post<any>(
       `${this.apiUrlWatchlist}/add`,
-      { symbol: symbol },
+      { symbol: symbol.toLocaleLowerCase() },
       {
         headers: { Authorization: `Bearer ${token}` },
       }

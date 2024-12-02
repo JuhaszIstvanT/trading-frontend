@@ -24,12 +24,10 @@ export class CurrencyComponent implements OnInit {
     this.marketService.fetchCurrencyInfos().subscribe(
       (currencies: CurrencyInfo[]) => {
         this.currencies = currencies;
-        console.log(this.currencies[0]);
-
         this.tradeService.getWatchlist().subscribe(
           (watchlist) => {
             this.currencies = this.currencies.map((currency) => {
-              currency.is_watchlist_elem = watchlist.includes(currency.symbol);
+              currency.is_watchlist_elem = watchlist.includes(currency.symbol.toLocaleLowerCase());
               return currency;
             });
           },

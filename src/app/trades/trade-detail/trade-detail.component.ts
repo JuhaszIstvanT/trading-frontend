@@ -30,7 +30,7 @@ export class TradeDetailComponent implements OnInit {
         this.trade = trade;
 
         this.marketService
-          .fetchCurrentPrice(this.trade.name, this.trade.buyCurrency)
+          .fetchCurrentPrice(this.trade.name)
           .subscribe(
             (price) => {
               this.actualPrice = price * this.trade.amount;
@@ -66,7 +66,7 @@ export class TradeDetailComponent implements OnInit {
     this.successMessage = message;
     setTimeout(() => {
       this.successMessage = '';
-    }, 1000); // Clear the message after 3 seconds
+    }, 1000);
   }
 
   refreshTradeDetails(): void {

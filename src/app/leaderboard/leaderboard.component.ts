@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 export class LeaderboardComponent implements OnInit {
   traders: any[] = [];
   pagedTraders: any[] = [];
-  pageSize: number = 25; // Number of items per page
+  pageSize: number = 25;
   currentPage: number = 1;
   totalPages: number = 0;
   pages: number[] = [];
@@ -36,7 +36,7 @@ export class LeaderboardComponent implements OnInit {
   calculatePagination(): void {
     this.totalPages = Math.ceil(this.traders.length / this.pageSize);
     this.pages = Array.from({ length: this.totalPages }, (_, i) => i + 1);
-    this.goToPage(1); // Initially load the first page
+    this.goToPage(1);
   }
 
   goToPage(page: number): void {
@@ -49,7 +49,7 @@ export class LeaderboardComponent implements OnInit {
 
   goToUserDetail(userId: number): void {
     if (userId) {
-      this.router.navigate(['/user', userId]); // Navigate to user detail page
+      this.router.navigate(['/user', userId]);
     } else {
       console.error('User ID is undefined.');
     }

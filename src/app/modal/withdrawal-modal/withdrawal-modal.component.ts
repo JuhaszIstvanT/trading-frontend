@@ -42,7 +42,7 @@ export class WithdrawalModalComponent {
               if (msg === 'Withdrawal successful') {
                 this.successMessage = 'Withdrawal was successful!';
                 this.errorMessage = '';
-                setTimeout(() => this.closeModal(), 1000); // Close the modal after 1 second
+                setTimeout(() => this.closeModal(), 1000);
               } else {
                 this.errorMessage = 'Withdrawal failed. Please try again.';
                 this.successMessage = '';

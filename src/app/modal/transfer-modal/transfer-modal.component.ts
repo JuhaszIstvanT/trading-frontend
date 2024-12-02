@@ -34,7 +34,7 @@ export class TransferModalComponent {
               this.errorMessage = '';
               setTimeout(() => {
                 this.closeModal();
-                this.successMessage = ''; // Clear success message after 1 second
+                this.successMessage = '';
               }, 1000);
             } else {
               this.errorMessage = 'Transfer failed. Please try again.';
